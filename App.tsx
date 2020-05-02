@@ -1,117 +1,62 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-declare const global: {HermesInternal: null | {}};
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet, Text, StatusBar, View} from 'react-native';
+import I18n from './src/lang/_i18n';
+import {Item} from './src/components/RadioButton';
+import RadioGroup from './src/components/RadioGroup';
 
 const App = () => {
+  const items: Item[] = [
+    {id: 'system', name: 'System'},
+    {id: 'en', name: 'English'},
+    {id: 'tr', name: 'Turkish'},
+    {id: 'ar', name: 'Arabic'},
+  ];
+  console.log(items);
+
+  const [selected, setSelected] = useState<Item>(items[0]);
+  const onSelected = (item: Item) => {
+    setSelected(item);
+  };
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <Text style={styles.text}>
+            {I18n.t(
+              'hello',
+              selected.id === 'system' ? {} : {locale: selected.id},
+            )}
+          </Text>
+        </View>
+        <View style={styles.bottomBar}>
+          <RadioGroup
+            selected={selected}
+            onSelected={onSelected}
+            items={items}
+          />
+        </View>
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  safeAreaView: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
+  text: {
     fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  bottomBar: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
 });
 
